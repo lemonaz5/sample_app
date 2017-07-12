@@ -1,4 +1,4 @@
-# Ruby on Rails Tutorial sample application [![CircleCI](https://circleci.com/gh/lemonaz5/sample_app.svg?style=svg)](https://circleci.com/gh/lemonaz5/sample_app)
+# Ruby on Rails Tutorial sample application [![CircleCI](https://img.shields.io/circleci/project/github/lemonaz5/sample_app.svg?style=flat-square)](https://circleci.com/gh/lemonaz5/sample_app)
 
 This is the sample application for
 [*Ruby on Rails Tutorial:
