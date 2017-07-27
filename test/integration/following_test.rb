@@ -33,7 +33,9 @@ class FollowingTest < ActionDispatch::IntegrationTest
 
   test "should follow a user with Ajax" do
     assert_difference '@user.following.count', 1 do
-      post relationships_path, xhr: true, params: { followed_id: @other.id }
+      post relationships_path, xhr: true,
+                               params: { followed_id: @other.id },
+                               headers: { 'Accept' => 'application/javascript' }
     end
   end
 
@@ -49,7 +51,15 @@ class FollowingTest < ActionDispatch::IntegrationTest
     @user.follow(@other)
     relationship = @user.active_relationships.find_by(followed_id: @other.id)
     assert_difference '@user.following.count', -1 do
-      delete relationship_path(relationship), xhr: true
+      delete relationship_path(relationship), xhr: true,
+                                              headers: { 'Accept' => 'application/javascript' }
+    end
+  end
+
+  test "feed on Home page" do
+    get root_path
+    @user.feed.paginate(page: 1).each do |micropost|
+      assert_match CGI.escapeHTML(micropost.content), response.body
     end
   end
 end
