@@ -2,7 +2,17 @@ module Twitter
   class Users < Grape::API
     resource :users do
       get do
-        User.all
+        users = User.all
+        authenticate!
+        type = current_user.admin? ? :full : :default
+        present(
+          {
+            type: type,
+            user: Entities::User.represent(users).as_json, #namespace=Entities(not match file)
+            userType: Entities::Type.represent(users).as_json,
+          }
+        )
+        # present users, with: Entities::Micropost, type: type #, only: [:name, :email]
       end
 
       #http://localhost:3000/api/v1/user/show
@@ -15,7 +25,8 @@ module Twitter
       desc 'Return a personal micropost'
       get :microposts do
         authenticate!
-        current_user.microposts.limit(10)
+        microposts = current_user.microposts.limit(10)
+        present microposts, with: Entities::Micropost
       end
 
       # http://localhost:3000/api/v1/user/1
